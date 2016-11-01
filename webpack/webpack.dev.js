@@ -3,6 +3,7 @@
 const HtmlWebpack = require('html-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
+const LiveReloadPlugin = require('webpack-livereload-plugin');
 const ChunkWebpack = webpack.optimize.CommonsChunkPlugin;
 
 const rootDir = path.resolve(__dirname, '..');
@@ -21,7 +22,8 @@ module.exports = {
     module: {
         loaders: [
             { loader: 'raw', test: /\.(css|html)$/ },
-            { exclude: /node_modules/, loader: 'ts', test: /\.ts$/ }
+            { exclude: /node_modules/, loader: 'ts', test: /\.ts$/ },
+            { test: /\.scss$/, loaders: ['to-string-loader', 'style-loader', 'css-loader', 'sass-loader'] }
         ]
     },
     output: {
@@ -38,7 +40,9 @@ module.exports = {
             filename: 'index.html',
             inject: 'body',
             template: path.resolve(rootDir, 'src', 'index.html')
-        })
+        }),
+        new LiveReloadPlugin()
+
     ],
     resolve: {
         extensions: ['', '.js', '.ts']
